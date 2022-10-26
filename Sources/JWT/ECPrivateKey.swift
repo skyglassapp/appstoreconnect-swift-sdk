@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CommonCrypto
+import Crypto
 
 public typealias ECPrivateKey = SecKey
 
@@ -16,8 +16,7 @@ extension ECPrivateKey {
             throw JWT.Error.ES256SigningFailed
         }
 
-        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        CC_SHA256((message as NSData).bytes, CC_LONG(message.count), &hash)
+        let hash = SHA256.hash(data: message)
         let digestData = Data(hash)
 
         let algorithm = SecKeyAlgorithm.ecdsaSignatureDigestX962SHA256
